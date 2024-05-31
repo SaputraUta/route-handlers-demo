@@ -1,8 +1,14 @@
 import { comment } from "postcss";
 import { comments } from "./data";
+import { NextRequest } from "next/server";
 
-export async function GET() {
-    return Response.json(comments);
+export async function GET(request: NextRequest) {
+    const searchParams = request.nextUrl.searchParams;
+    const query = searchParams.get("query");
+    const filteredComments = query ?
+    comments.filter((c) => c.comment.toLowerCase().includes(query.toLowerCase())) :
+    comments
+    return Response.json(filteredComments);
 }
 
 export async function POST(request: Request) {
